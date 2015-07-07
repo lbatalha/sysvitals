@@ -11,14 +11,17 @@ url = "http://localhost:5000/post"
 while True:
 		
 		print(chr(27) + "[2J")
-		cpu_time = psutil.cpu_times()
-		vmem = psutil.virtual_memory()
-		swap = psutil.swap_memory()
-		diskparts = psutil.disk_partitions()
-		diskio = psutil.disk_partitions()
-
-		data = json.dumps([ cpu_time, vmem, swap, diskparts, diskio])
-
+		cpu_time = vars(psutil.cpu_times())
+		cpu_percent = psutil.cpu_percent(percpu=True)
+		vmem = vars(psutil.virtual_memory())
+		swap = vars(psutil.swap_memory())
+		diskparts = []
+		for a in psutil.disk_partitions():
+			diskparts.append(vars(a))
+		
+		diskio = vars(psutil.disk_io_counters())
+	
+		data = json.dumps([ cpu_time, cpu_percent, vmem, swap, diskparts, diskio])
 		
 		req = urllib2.Request(url, data, headers={'Content-type': 'application/json'})
 
