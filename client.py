@@ -2,6 +2,11 @@
 
 import psutil
 import time
+import json
+import urllib, urllib2
+url = "http://localhost:5000/post"
+
+
 
 while True:
 		
@@ -12,7 +17,13 @@ while True:
 		diskparts = psutil.disk_partitions()
 		diskio = psutil.disk_partitions()
 
-		print(cpu_time) 
-		print(vmem + swap)  
-		print(diskparts + diskio)
+		data = json.dumps([ cpu_time, vmem, swap, diskparts, diskio])
+
+		
+		req = urllib2.Request(url, data, headers={'Content-type': 'application/json'})
+
+		response = urllib2.urlopen(req)
+		print(response.read())
+		
+		
 		time.sleep(1)		
