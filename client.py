@@ -14,8 +14,9 @@ while True:
 		
 		cpu, disks, host_info, memory, network, processes, other = [],[],[],[],[],[],[] 
 		
-		host_info.append(socket.gethostname())
-		#host_info.append(
+		host_info.append(int(time.time()))
+		host_info.append(socket.getfqdn())
+		
 		cpu.append(vars(psutil.cpu_times()))
 		cpu.append(psutil.cpu_percent(percpu=True))
 		
@@ -27,7 +28,10 @@ while True:
 	
 		if_addr = {}
 		for k, v in psutil.net_if_addrs().iteritems():
-			if_addr[k] = v
+			values = []
+			for i in v:
+				values.append(vars(i))
+			if_addr[k] = values
 		
 		netio = {}
 		for k, v in psutil.net_io_counters(pernic=True).iteritems():
